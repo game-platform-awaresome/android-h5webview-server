@@ -1,0 +1,30 @@
+{
+  "name": "android-h5webview-server",
+  "version": "1.0.0",
+  "description": "pack android-h5webview online",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atom/electron-quick-start.git"
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/atom/electron-quick-start/issues"
+  },
+  "homepage": "https://github.com/atom/electron-quick-start#readme",
+  "devDependencies": {
+    "express": "4.13.4",
+    "socket.io": "latest",
+    "multiparty": "latest"
+  }
+}

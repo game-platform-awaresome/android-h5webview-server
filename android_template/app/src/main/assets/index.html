@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>测试</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var top = {};
+            function loginWX(){
+                <!--if(window.egretGameCenter && window.egretGameCenter.isWXInstalled()){-->
+                    <!--window.egretGameCenter.loginWX("file:///android_assets/index.html?abc=1231");-->
+                <!--}-->
+
+                log(window.shortcut);
+                var ijson = "{ 'name':'愚公移山','icon':'https://image.egret.com/game/gameIcon/0/150314183701_ebmkwg.png','url':'https://www.baidu.com' }";
+                if (typeof window.shortcut != 'undefined') {
+			        window.shortcut.createShortcut(ijson);
+		        }
+            }
+
+            function listenBackWX(code){
+                log(code);
+                //todo
+            }
+
+            function log(content){
+                var logger = document.getElementsByName("console_log")[0];
+                logger.innerHTML += "<p>"+content+"</p>";
+            }
+
+            window.onload = function(){
+                log(window.location);
+                log("init!");
+            }
+        </script>
+        <form>
+            <input name="wxLogin" type="button" value="微信登录" onclick="loginWX()"/>
+            nbsp;nbsp;nbsp;nbsp;nbsp;nbsp;
+            <input name="refresh" type="button" value="刷新token" onclick="refreshToken()"/>
+        </form>
+        <div name="console_log"></div>
+    </body>
+</html>

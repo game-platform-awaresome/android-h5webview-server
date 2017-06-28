@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '25.0.0'
+
+    defaultConfig {
+        //{packageName
+applicationId "org.egret.game"
+versionName "v1.0.1"
+versionCode 1
+//packageName}
+        minSdkVersion 14
+        targetSdkVersion 23
+    }
+    signingConfigs {
+        release {
+            storeFile file("my-release-key.keystore")
+            storePassword "egretlarkreactnative"
+            keyAlias "egret-lark-react-native"
+            keyPassword "egretlarkreactnative"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    splits {
+        abi {
+          enable true
+          reset()
+          include 'armeabi-v7a'
+        }
+    }
+
+    useLibrary 'org.apache.http.legacy'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:1.0.2'
+    testCompile 'junit:junit:4.12'
+}

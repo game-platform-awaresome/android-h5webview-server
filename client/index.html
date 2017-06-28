@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <style>
+      #configForm{
+        width:100%;
+        height:550px;
+        float:center;
+        background-color:#00ee00;
+      }
+      #channelListTitle{
+          width:150px;
+          height:25px;
+          text-align:center;
+          padding-top: 7px;
+          background-color:#afafaf;
+      }
+      #channelnamelist{
+        background-color:#eeeeee;
+        width:150px;
+        height:500px;
+        float:left;
+      }
+      #channelconfigarea{
+        padding-top: 10px;
+        padding-left: 195px;
+      }
+      #wxform{
+        padding-top: 5px;
+        padding-left: 15px;
+        width:400px;
+        height:110px;
+        background-color:#aaeeaa;
+      }
+      .inputtext{
+        padding-left:5px;
+        width:250px;
+      }
+      .holder{
+        border:2px dashed #ccc;
+        width:60%;
+        height:50;
+        margin:20px auto;
+        resize:false;
+      }
+      .holder.hover{ 
+        border:2px dashed #333;
+      }
+      .infofont{
+        font-size:14px;
+        color:#777777;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Egret H5 Game 微端批量打包工具</h1>
+    <script>console.log("html log  :  "+process)</script>
+    <div name="sdk_div">
+    </div>
+    <form id="mainDiv">
+      <ul>
+        <li>请输入游戏名称:<input class="inputtext" type="text" name="game_name" value="GameName"/></li>
+       <!-- <li>请输入游戏ID:<input type="text" name="game_id" value="gameID1234"/></li> -->
+        <li>游戏版本名称(vX.X.X):<input class="inputtext" type="text" name="version_name"  value="v1.0.1"/></li>
+        <li>游戏版本号(可以用默认值):<input class="inputtext" type="number" name="version_code" value=1 /></li>
+       <!--
+        <li><input name="quicklaunch" type="checkbox" value="false" onclick="onCheckBoxClick(event)"/>是否生成桌面快捷方式 <br>
+          <div>快捷方式链接:<input type="text" disabled=true name="gamecenter_url" value="egret://gamecenter.egret-labs.org/20379?ad=qimi"/><label>游戏运行后会在桌面上生成一个图标。图标的链接地址在这儿设置。</label></div></li>
+        -->
+      </ul>
+      <div id="configForm">
+        <nav>
+          <div id="channelListTitle">渠道列表</div>
+          <div id="channelnamelist">
+          </div>
+        </nav>
+        <section id="channelconfigarea">
+            <div>渠道名:<input class="inputtext" type="text" id="game_channel" value="GameChannel"/><font class="infofont">只是用于列表显示。不影响APP内容。</font></div>
+            <div>游戏包名(xxx.xxx.xxx):<input class="inputtext" type="text" name="package_name" value="org.egret.game"/></div>
+            <div hidden=false>游戏ID(appID):<input  class="inputtext" type="text" name="app_id" value="22373"/></div>
+            <div hidden=false>渠道ID:<input class="inputtext" type="text" name="channel_id" value="1020"/></div>
+            <br>
+            <div id="wxform">
+              <div>配置微信参数<font class="infofont">(注意包名是否匹配)</font></div>
+              <ul>
+                <li>APP_ID:<input class="inputtext"  id="wx_appid" type="text"placeholder="输入APP_ID" value="wx27e66e74f545968d"></input></li>
+                <li>PARTNER_ID:<input class="inputtext" id="wx_partner_id" type="text" placeholder="输入PARTNER_ID" value="1481647162"></input></li>
+                <li>KEY:<input class="inputtext" id="wx_key" type="text" placeholder="输入PARTNER_ID" value="bf1b882478cf87301295329f8647a540"></input></li>
+              </ul>
+            </div>
+            <br>
+            <div>请拖入loading页图片(jpg):
+                <div id="loading_image_form" enctype="multipart/form-data">
+                  <!--<input type="file" id="loading_image_fileinput"/><br>
+                  <input type="button" value="上传文件" onclick="uploadLoadingImage()"/><br>
+                  -->
+                  <textarea class="holder" id="loading_image_holder" placeholder="也可以直接输入地址" ondrop="onLoadingImgDrop(event)"></textarea>
+                </div>
+            </div>
+            <div>请拖入游戏ICON图片(png):
+                <div id="gameicon_image_form" enctype="multipart/form-data">
+                 <!-- <input type="file" id="gameicon_image_fileinput"/><br>
+                  <input type="button" value="上传文件" onclick="uploadIconImage()"/><br>
+                  -->
+                  <textarea class="holder" id="gameicon_image_holder" placeholder="也可以直接输入地址" ondrop = "onIconImgDrop(event)"></textarea>
+                </div>
+            </div>
+            <div>请输入游戏地址:<input class="inputtext" type="text" name="game_url"/></div>
+            <br>
+            <input name="addChannel" type="button" value="添加渠道" onclick="onAddChannel()"/>
+        </section>
+        <br>
+       
+      </div>
+    </form>
+    <input name="package" type="button" value="开始打包" onclick="onStart()"/>
+    <div name="console_log"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
