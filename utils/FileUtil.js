@@ -142,11 +142,11 @@ function _copy_dir(sourceDir, outputDir) {
         copy(Path.join(sourceDir, fileName), Path.join(outputDir, fileName));
     });
 }
-function remove(path) {
+function remove(path , notRMRoot) {
     path = escapePath(path);
     try {
         FS.lstatSync(path).isDirectory()
-            ? rmdir(path)
+            ? rmdir(path,notRMRoot)
             : FS.unlinkSync(path);
         getDirectoryListing(path);
     }
@@ -154,7 +154,7 @@ function remove(path) {
     }
 }
 exports.remove = remove;
-function rmdir(path) {
+function rmdir(path, notRMRoot) {
     var files = [];
     if (FS.existsSync(path)) {
         files = FS.readdirSync(path);
@@ -167,7 +167,9 @@ function rmdir(path) {
                 FS.unlinkSync(curPath);
             }
         });
-        FS.rmdirSync(path);
+        if (!notRMRoot) {
+            FS.rmdirSync(path);
+        }
     }
 }
 function rename(oldPath, newPath) {

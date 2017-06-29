@@ -17,6 +17,7 @@ let STRINGS_PATH = null;
 let OUTPUT_PATH = null;
 let ANDROID_PATH = null;
 var OUT_APK_FOLDER = null;
+var OUT_BUILD_RESULT_FOLDER = null;
 
 function setPackagerTemplatePath(path) {
     TEMPLATE_PATH = path;
@@ -35,6 +36,11 @@ function setDefaultPath() {
     OUT_APK_FOLDER = FileUtil.joinPath(__dirname, "./outApk");
     if (!FileUtil.exists(OUT_APK_FOLDER)) {
         FileUtil.createDirectory(OUT_APK_FOLDER);
+    }
+
+    OUT_BUILD_RESULT_FOLDER = FileUtil.joinPath(__dirname, "./buildapks");
+    if (!FileUtil.exists(OUT_BUILD_RESULT_FOLDER)) {
+        FileUtil.createDirectory(OUT_BUILD_RESULT_FOLDER);
     }
 
     setPackagerTemplatePath(FileUtil.joinPath(__dirname, './android_template'));
@@ -104,7 +110,7 @@ function writeStringResource(appName, gameUrl, gameCenterUrl, gameId, channelId,
             '</string>';
     }
 
-    if(channelId != null && channelId.length > 0){
+    if (channelId != null && channelId.length > 0) {
         xmlContent = xmlContent +
             '<string name="channel_id">' +
             channelId +
@@ -284,7 +290,7 @@ function run(args, cb) {
 
     if (pathChecked(cb) &&
         (loadingimage_path_val === '' || (loadingimage_path_val != '' && writeLoadingImage(loadingimage_path_val, cb))) &&
-        writeStringResource(game_name_val, game_url_val, gamecenter_url_val, game_id_val,channel_id_val, cb) &&
+        writeStringResource(game_name_val, game_url_val, gamecenter_url_val, game_id_val, channel_id_val, cb) &&
         writeIconImage(icon_path_val, cb) &&
         writeGradlePackageName(package_name_val, version_name_val, version_code_val, cb) &&
         writeWXConfig(wx_app_id, wx_partner_id, wx_key)) {
@@ -336,14 +342,27 @@ function getOutputApkParthByName(apkName) {
 }
 exports.getOutputApkParthByName = getOutputApkParthByName;
 
+function clearOutApk(){
+    FileUtil.remove(OUT_APK_FOLDER,true);
+}
 
 function zipOutputFile(fileName) {
-    // var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_APK_FOLDER + "/buildresult.zip" + " OUT_APK_FOLDER"
-    // exec(zipCommand, function (err, stdout, stderr) {
-    //     console.log("zip cb err:" + err + "; stdout:" + stdout + "; stderr:" + stderr);
-    // })
+    var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_BUILD_RESULT_FOLDER + "/buildresult.zip" + " " +OUT_APK_FOLDER 
+    exec(zipCommand, function (err, stdout, stderr) {
+        clearOutApk();
+        console.log("zip cb err:" + err + "; stdout:" + stdout + "; stderr:" + stderr);
+    })
 }
 exports.zipOutputFile = zipOutputFile;
+
+function getOutputZipFile() {
+    var zipFile = FileUtil.joinPath(OUT_BUILD_RESULT_FOLDER + "/buildresult.zip");
+    if (FileUtil.exists(zipFile)) {
+        return zipFile;
+    }
+    return null;
+}
+exports.getOutputZipFile = getOutputZipFile;
 
 function moveReleaseApk(apkName) {
     var apkFile = getOutputFile();

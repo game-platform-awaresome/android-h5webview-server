@@ -21,15 +21,23 @@ app.get('/download', function (req, res, next) {
 app.get('/downloadAllApk', function (req, res, next) {
     //..db get file 
     console.log("server downloadAllApk ==== file number : " + generatedApkArray.length);
-    var apkFileParth = null;
-    var apkLen = generatedApkArray.length;
+    // var apkFileParth = null;
+    // var apkLen = generatedApkArray.length;
 
-    for (var i = 0; i < generatedApkArray.length; i++) {
-        apkFileParth = packager.getOutputApkParthByName(generatedApkArray[i]);
-        console.log("server downloadAllApk , download file: " + apkFileParth);
-        res.download(apkFileParth, function (e) {
+    // for (var i = 0; i < generatedApkArray.length; i++) {
+    //     apkFileParth = packager.getOutputApkParthByName(generatedApkArray[i]);
+    //     console.log("server downloadAllApk , download file: " + apkFileParth);
+    //     res.download(apkFileParth, function (e) {
+    //         if (e) {
+    //             console.log("download file: " + apkFileParth + ". error: " + e);
+    //         }
+    //     });
+    // }
+    var zipFile = packager.getOutputZipFile();
+    if(zipFile && zipFile.length > 0 ){
+        res.download(zipFile,function (e) {
             if (e) {
-                console.log("download file: " + apkFileParth + ". error: " + e);
+                console.log("download zip file: " + zipFile + ". error: " + e);
             }
         });
     }
@@ -169,7 +177,7 @@ socketIO.on("connection", (socket) => {
 
             if (checkResult && runCounter > channelLen - 1) {
                 socket.emit('console.log', "run result = " + channelIndex + "/" + channelLen);
-                stdout += "<a href='/download'>点此下载</a>";
+                stdout += "<a href='/downloadAllApk'>点此下载</a>";
             }
         };
 
