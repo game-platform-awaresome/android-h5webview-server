@@ -25,7 +25,7 @@ import java.util.Map;
  * Created by yanjiaqi on 16/4/24.
  */
 public class Util {
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static Map<String, String> cookies = new HashMap<>();
     public static String URL_STATISTICS_ICON_OPEN = "http://gameanalysis.egret.com/qimiAppStat.php?act=pushGameIcon";
     public static String URL_STATISTICS_GAME_OPEN = "http://gameanalysis.egret.com/qimiAppStat.php?act=installGame";

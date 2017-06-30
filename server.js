@@ -146,7 +146,7 @@ socketIO.on("connection", (socket) => {
 
         var runCB = function (err, stdout, stderr) {
             var checkResult = false;
-            var apkName = runArgs.game_name + "_" + runArgs.package_name + ".apk";
+            var apkName = runArgs.game_name + "_" + runArgs.package_name+ ".apk";
             if (err) {
                 runCounter++;
                 checkResult = true;

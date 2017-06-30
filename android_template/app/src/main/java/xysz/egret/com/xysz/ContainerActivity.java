@@ -46,6 +46,7 @@ import java.util.List;
 import xysz.egret.com.third.tencent.ShortcutInterface;
 import xysz.egret.com.third.tencent.TencentMMManager;
 import xysz.egret.com.xysz.view.HTML5WebView;
+import xysz.egret.com.xysz.view.Navigation;
 
 /**
  * Created by yanjiaqi on 16/1/12.
@@ -262,9 +263,11 @@ public class ContainerActivity extends Activity{
             domain = host.substring(host.indexOf("."));
         }
         Log.d("yanjiaqi","load url domain:"+domain);
+
+//        startUrl = url + Util.getUrlParams(this);
         startUrl = url+(url.contains("?")? "&":"?") + Util.getUrlParams(this);
 
-        android.util.Log.d(">>>>>", startUrl);
+        android.util.Log.d(">>>>> >", startUrl);
 
         startUrlDomain = domain;
         setCookieForDomainStatic(startUrl);

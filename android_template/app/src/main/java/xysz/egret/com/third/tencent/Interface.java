@@ -50,7 +50,7 @@ public class Interface {
 
     @JavascriptInterface
     public void shareWX(String data) {
-        Log.d("yanjiaqi", "++>>>shareWX "+data);
+        Log.d("++>>>shareWX ", data);
 
         TencentMMManager tmm = TencentMMManager.getInstance();
         if(tmm.getApi() == null) {

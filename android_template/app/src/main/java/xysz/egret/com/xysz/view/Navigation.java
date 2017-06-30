@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import xysz.egret.com.third.tencent.TencentMMManager;
 import xysz.egret.com.xysz.R;
+import xysz.egret.com.xysz.Util;
 
 /**
  * Created by egret0 on 6/7/17.
@@ -36,6 +37,8 @@ public class Navigation {
 
     private static Navigation _instance = null;
 
+    private String _startUrl = "";
+
     public static Navigation getInstance() {
         return _instance;
     }
@@ -53,12 +56,13 @@ public class Navigation {
             public void onClick(View view) {
                 Log.d("++> ", "back");
 
-                if (lastUrl.indexOf("appId") != -1) {
-                    webView.loadUrl(lastUrl.substring(0, lastUrl.indexOf("&appId")));
-                }
-                else {
-                    webView.goBack();
-                }
+                webView.loadUrl(_startUrl);
+//                if (lastUrl.indexOf("appId") != -1) {
+//                    webView.loadUrl(lastUrl.substring(0, lastUrl.indexOf("&appId")));
+//                }
+//                else {
+//                    webView.goBack();
+//                }
             }
         });
 
@@ -85,6 +89,7 @@ public class Navigation {
         tittle = (TextView)relativeLayout.findViewById(R.id.text_tittle);
 
         _instance = this;
+        _startUrl = "http://wan.yichi666.com/go.php?" + Util.getUrlParams(context);
 
         relativeLayout.post(new Runnable() {
             @Override
