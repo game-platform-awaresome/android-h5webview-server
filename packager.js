@@ -85,8 +85,17 @@ function pathChecked(cb) {
         return false
     }
 }
-
 exports.pathChecked = pathChecked;
+
+var currentResultName = null;
+var currentResultFolder = null;
+function createNewResult(name){
+    currentResultName = name;
+    currentResultFolder = FileUtil.joinPath(BUILD_RESULT_FOLDER , "/"+name);
+    if(!FileUtil.exists(currentResultFolder)){
+        FileUtil.createDirectory(currentResultFolder);
+    }
+}
 
 function writeStringResource(appName, gameUrl, gameCenterUrl, gameId, channelId, cb) {
     var xmlContent =
@@ -233,11 +242,13 @@ function writeWXConfig(wx_app_id, wx_partner_id, wx_key) {
     }
 }
 
+var currentGameName = "game";
 function run(args, cb) {
     if (args.android_path) {
         setAndroidHome(args.android_path, cb);
     }
     const game_name_val = args.game_name;
+    currentGameName = game_name_val;
     const package_name_val = args.package_name;
     const game_url_val = args.game_url;
     const icon_path_val = args.icon_path;
@@ -346,17 +357,23 @@ function clearOutApk(){
     FileUtil.remove(OUT_APK_FOLDER,true);
 }
 
-function zipOutputFile(fileName) {
-    var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_BUILD_RESULT_FOLDER + "/buildresult.zip" + " " +OUT_APK_FOLDER 
+var currentZipFileName = "buildresult";
+
+function zipOutputFile(fileName ,cb ) {
+    var date = new Date();
+    currentZipFileName = currentGameName+"-"+ date.getUTCFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+"-"+date.getTime();
+    console.log("zipOutputFile filename : "+currentZipFileName);
+    var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_BUILD_RESULT_FOLDER + "/"+currentZipFileName+".zip " +OUT_APK_FOLDER 
     exec(zipCommand, function (err, stdout, stderr) {
         clearOutApk();
         console.log("zip cb err:" + err + "; stdout:" + stdout + "; stderr:" + stderr);
+        cb(currentZipFileName,err,stdout,stderr);
     })
 }
 exports.zipOutputFile = zipOutputFile;
 
 function getOutputZipFile() {
-    var zipFile = FileUtil.joinPath(OUT_BUILD_RESULT_FOLDER + "/buildresult.zip");
+    var zipFile = FileUtil.joinPath(OUT_BUILD_RESULT_FOLDER + "/"+currentZipFileName+".zip");
     if (FileUtil.exists(zipFile)) {
         return zipFile;
     }

@@ -168,17 +168,25 @@ socketIO.on("connection", (socket) => {
                             packager.run(runArgs, runCB);
                         }, 0)
                     } else {
-                        packager.zipOutputFile(apkName);
-                        stdout += "<a href='/downloadAllApk'>点此下载</a>";
+                        stdout += "<br><br> 开始压缩打包当前构建的所有微端apk ……";
+                        packager.zipOutputFile(apkName , function(zipFileName,err, stdout, stderr){
+                            console.log("zipOutputFile ---------");
+                            if(err){
+                                socket.emit('console.log', "zip apks err: "+err);
+                            }else{
+                                 socket.emit('console.log', "<br> <a href='/downloadAllApk'>点此下载微端包："+zipFileName+".zip</a>");
+                            }
+                        });
+                        
                     }
                 }
                 socket.emit('console.log', stdout);
             }
 
-            if (checkResult && runCounter > channelLen - 1) {
-                socket.emit('console.log', "run result = " + channelIndex + "/" + channelLen);
-                stdout += "<a href='/downloadAllApk'>点此下载</a>";
-            }
+            // if (checkResult && runCounter > channelLen - 1) {
+            //    socket.emit('console.log', "run result = " + channelIndex + "/" + channelLen);
+            //    stdout += "<br> <a href='/downloadAllApk'>点此下载</a>";
+            // }
         };
 
         console.log("packager run ");
