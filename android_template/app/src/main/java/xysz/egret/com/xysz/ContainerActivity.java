@@ -100,6 +100,14 @@ public class ContainerActivity extends Activity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.setContentView(R.layout.main);
+
+        try{
+            Util.getIMEI(this);
+        }catch(Exception e){
+            alertPermissionRequest(e);
+            return;
+        }
+
         //测试splash页
 //        ((ImageView)findViewById(R.id.id_top_cover)).setVisibility(View.VISIBLE);
         mContainer = (FrameLayout)findViewById(R.id.id_top);
@@ -356,6 +364,25 @@ public class ContainerActivity extends Activity{
         }
     }
 
+    private void exitGame(){
+        this.finish();
+    }
+
+    public void alertPermissionRequest(Exception e){
+        Log.d("yanjiaqi","alertPermissionRequest : "+e.getMessage());
+        AlertDialog.Builder builder = new AlertDialog.Builder(ContainerActivity.this);
+        builder.setTitle("权限提示").setCancelable(false)
+                .setMessage("请手动打开游戏所需权限。\r\n设置->应用,找到游戏\r\n打开游戏所需权限。")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        dialog.cancel();
+                        exitGame();
+                    }
+                }).show();
+    }
+
     public boolean upload(String url,String extraParams){
         String charset = "utf-8";
         try{
@@ -375,17 +402,7 @@ public class ContainerActivity extends Activity{
                 }
             });
         }catch(Exception e){
-            Log.d("yanjiaqi",e.getMessage());
-            AlertDialog.Builder builder = new AlertDialog.Builder(ContainerActivity.this);
-            builder.setTitle("权限提示").setCancelable(false)
-                    .setMessage("请手动打开所有权限!")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            dialog.cancel();
-                        }
-                    }).show();
+            alertPermissionRequest(e);
             return false;
         }
         return true;
