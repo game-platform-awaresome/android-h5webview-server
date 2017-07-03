@@ -274,16 +274,14 @@ function onAddChannel() {
 function onLoadingImgDrop(event) {
     let files = event.dataTransfer.files;
     file = files[0];
-    uploadLoadingImage(file, currentLoadingImgBuffer);
-    currentLoadingImgBuffer.file = file;
+    uploadLoadingImage(file);
     console.log("----------- onLoadingImgDrop = " + event);
 }
 
 function onIconImgDrop(event) {
     let files = event.dataTransfer.files;
     file = files[0];
-    uploadIconImage(file, currentIconImgBuffer);
-    currentIconImgBuffer.file = file;
+    uploadIconImage(file);
     console.log("----------- onIconImgDrop = " + event);
 }
 
@@ -310,12 +308,12 @@ function cleanLog() {
     formEle.removeChild(formEle.childNodes[formEle.childNodes.length - 1]);
 }
 
-function uploadLoadingImage(imgFile, buffer) {
-    uploadFile('loading_image', imgFile, buffer);
+function uploadLoadingImage(imgFile) {
+    uploadFile('loading_image', imgFile, currentLoadingImgBuffer);
 }
 
-function uploadIconImage(imgFile, buffer) {
-    uploadFile('gameicon_image', imgFile, buffer);
+function uploadIconImage(imgFile) {
+    uploadFile('gameicon_image', imgFile, currentIconImgBuffer);
 }
 
 function uploadFile(name, inFile, resultBuffer) {
@@ -333,6 +331,9 @@ function uploadFile(name, inFile, resultBuffer) {
         files = fileinput.files;
         file = files[0];
     }
+
+    resultBuffer.file = file;
+
     formData.append('myfile', file);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/upload', true);

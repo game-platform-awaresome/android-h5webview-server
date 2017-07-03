@@ -52,6 +52,9 @@
         font-size:14px;
         color:#777777;
       }
+      .source_input{
+        width:500px
+      }
     </style>
   </head>
   <body>
@@ -93,17 +96,15 @@
             <br>
             <div>请拖入loading页图片(jpg):
                 <div id="loading_image_form" enctype="multipart/form-data">
-                  <!--<input type="file" id="loading_image_fileinput"/><br>
+                  <input class="source_input" type="file" id="loading_image_fileinput" width=200px/><br>
                   <input type="button" value="上传文件" onclick="uploadLoadingImage()"/><br>
-                  -->
                   <textarea class="holder" id="loading_image_holder" placeholder="也可以直接输入地址" ondrop="onLoadingImgDrop(event)"></textarea>
                 </div>
             </div>
             <div>请拖入游戏ICON图片(png):
                 <div id="gameicon_image_form" enctype="multipart/form-data">
-                 <!-- <input type="file" id="gameicon_image_fileinput"/><br>
+                  <input class="source_input" type="file" id="gameicon_image_fileinput"/><br>
                   <input type="button" value="上传文件" onclick="uploadIconImage()"/><br>
-                  -->
                   <textarea class="holder" id="gameicon_image_holder" placeholder="也可以直接输入地址" ondrop = "onIconImgDrop(event)"></textarea>
                 </div>
             </div>
