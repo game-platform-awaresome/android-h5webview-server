@@ -138,7 +138,10 @@ socketIO.on("connection", (socket) => {
                 android_path: args.android_path,
                 wx_app_id: channelConfig.wx_app_id,
                 wx_partner_id: channelConfig.wx_partner_id,
-                wx_key:channelConfig.wx_key
+                wx_key:channelConfig.wx_key,
+                title_back_button_hide:channelConfig.title_back_button_hide,
+                title_share_button_hide:channelConfig.title_share_button_hide,
+                title_share_url:channelConfig.title_share_url
             }
         }
 

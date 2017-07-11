@@ -82,6 +82,10 @@ prototype.radio = null;
 prototype.wx_app_id = "";
 prototype.wx_partner_id = "";
 prototype.wx_key = "";
+//页面标题
+prototype.title_back_button_hide = false;
+prototype.title_share_button_hide = false;
+prototype.title_share_url = false;
 
 var channelMap = {};
 var channelCounter = 0;
@@ -106,6 +110,12 @@ function showConfig(channelConfig) {
     var wx_key_ele = document.getElementById("wx_key");
     /////////////////////////////////////////
 
+    //页面顶部按钮//////////////////////////
+    var title_back_button_hide = document.getElementById("btn_back_hide");
+    var title_share_button_hide = document.getElementById("btn_share_hide");
+    var title_share_url = document.getElementById("share_url");
+    ///////////////////////////////////
+
     if (channelConfig) {
         game_channel.value = channelConfig.channelName;
         ele_package_name.value = channelConfig.packageName;
@@ -121,10 +131,16 @@ function showConfig(channelConfig) {
         iconImgHolder.value = channelConfig.iconImgBuffer.response;
 
         //微信信息/////////////////////////////////
-        wx_app_id_ele.value = tempConfig.wx_app_id;
-        wx_partner_id_ele.value = tempConfig.wx_partner_id;
-        wx_key_ele.value = tempConfig.wx_key;
+        wx_app_id_ele.value = channelConfig.wx_app_id;
+        wx_partner_id_ele.value = channelConfig.wx_partner_id;
+        wx_key_ele.value = channelConfig.wx_key;
         //////////////////////////////////////////
+
+        //页面顶部标题//////////////////////////////
+        title_back_button_hide.checked = channelConfig.title_back_button_hide;
+        title_share_button_hide.checked = channelConfig.title_share_url;
+        title_share_url.value = channelConfig.title_share_url;
+        ////////////////////////////////////////////
 
     } else {
         console.error("showConfig channelConfig is null。");
@@ -143,6 +159,12 @@ function clearConfigShow() {
     document.getElementById("wx_partner_id").value = null;
     document.getElementById("wx_key").value = null;
     /////////////////////////////////////////
+
+    //页面顶部按钮//////////////////////////
+    document.getElementById("btn_back_hide").checked = false;
+    document.getElementById("btn_share_hide").checked = false;
+    document.getElementById("share_url").value = "";
+    ///////////////////////////////////
 }
 
 function addChannel() {
@@ -172,11 +194,11 @@ function addChannel() {
         console.error("请输入游戏地址");
         return;
     }
-    if(!appId || appId.length < 1){
+    if (!appId || appId.length < 1) {
         console.error("请输入游戏ID(appId)");
         return;
     }
-    if(!channelId || channelId.length < 1){
+    if (!channelId || channelId.length < 1) {
         console.error("请输入渠道ID");
         return;
     }
@@ -206,6 +228,15 @@ function addChannel() {
     tempConfig.wx_partner_id = document.getElementById("wx_partner_id").value || "";
     tempConfig.wx_key = document.getElementById("wx_key").value || "";
     /////////////////////////////////////////
+
+
+    //页面顶部按钮//////////////////////////
+    tempConfig.title_back_button_hide = document.getElementById("btn_back_hide").checked;
+    tempConfig.title_share_button_hide = document.getElementById("btn_share_hide").checked;
+    console.log("ddddddddddddddddddddddddddddddd ddd = "+document.getElementById("btn_back_hide").checked );
+    tempConfig.title_share_url = document.getElementById("share_url").value;
+    console.log("cccccccccccccccccccccccccccc = "+document.getElementById("share_url").value);
+    ///////////////////////////////////
 
     var radio = null;
     if (isNewConfig) {
@@ -415,13 +446,16 @@ function onStart() {
             channel_name: channelConfig.channelName,
             package_name: channelConfig.packageName,
             game_url: channelConfig.gameURL,
-            app_id :channelConfig.appId,
-            channel_id : channelConfig.channelId,
+            app_id: channelConfig.appId,
+            channel_id: channelConfig.channelId,
             icon_path: channelConfig.iconImgBuffer.response,
             loadingimage_path: channelConfig.loadingImgBuffer.response,
             wx_app_id: channelConfig.wx_app_id,
             wx_partner_id: channelConfig.wx_partner_id,
-            wx_key: channelConfig.wx_key
+            wx_key: channelConfig.wx_key,
+            title_back_button_hide:channelConfig.title_back_button_hide,
+            title_share_button_hide:channelConfig.title_share_button_hide,
+            title_share_url:channelConfig.title_share_url
         }, len, addConfigCB);
     }
 

@@ -89,15 +89,15 @@ exports.pathChecked = pathChecked;
 
 var currentResultName = null;
 var currentResultFolder = null;
-function createNewResult(name){
+function createNewResult(name) {
     currentResultName = name;
-    currentResultFolder = FileUtil.joinPath(BUILD_RESULT_FOLDER , "/"+name);
-    if(!FileUtil.exists(currentResultFolder)){
+    currentResultFolder = FileUtil.joinPath(BUILD_RESULT_FOLDER, "/" + name);
+    if (!FileUtil.exists(currentResultFolder)) {
         FileUtil.createDirectory(currentResultFolder);
     }
 }
 
-function writeStringResource(appName, gameUrl, gameCenterUrl, gameId, channelId, cb) {
+function writeStringResource(appName, gameUrl, gameCenterUrl, gameId, channelId, titleConfigs, cb) {
     var xmlContent =
         '<resources>' +
         '<string name="app_name">' +
@@ -125,6 +125,20 @@ function writeStringResource(appName, gameUrl, gameCenterUrl, gameId, channelId,
             channelId +
             '</string>';
     }
+
+    //页面顶部按钮
+    if (titleConfigs[0]) {
+        xmlContent = xmlContent +
+            '<string name="back_button_hide">true</string>';
+    }
+    if (titleConfigs[1]) {
+        xmlContent = xmlContent +
+            '<string name="share_button_hide">true</string>';
+    }
+    xmlContent = xmlContent +
+            '<string name="share_url">'+titleConfigs[2]+'</string>';
+    /////////////////
+
     xmlContent = xmlContent +
         '</resources>';
     FileUtil.save(STRINGS_PATH, xmlContent);
@@ -265,6 +279,12 @@ function run(args, cb) {
     const wx_key = args.wx_key;
     ////////////////////////////////////////////////
 
+    //页面顶部按钮
+    const title_back_button_hide = args.title_back_button_hide;
+    const title_share_button_hide = args.title_share_button_hide;
+    const title_share_url = args.title_share_url;
+    ////////////////////////////
+
     if (!game_name_val) {
         cb(true, '', 'game_name should not be empty');
         return;
@@ -301,7 +321,8 @@ function run(args, cb) {
 
     if (pathChecked(cb) &&
         (loadingimage_path_val === '' || (loadingimage_path_val != '' && writeLoadingImage(loadingimage_path_val, cb))) &&
-        writeStringResource(game_name_val, game_url_val, gamecenter_url_val, game_id_val, channel_id_val, cb) &&
+        writeStringResource(game_name_val, game_url_val, gamecenter_url_val, game_id_val, channel_id_val,
+            [title_back_button_hide, title_share_button_hide, title_share_url], cb) &&
         writeIconImage(icon_path_val, cb) &&
         writeGradlePackageName(package_name_val, version_name_val, version_code_val, cb) &&
         writeWXConfig(wx_app_id, wx_partner_id, wx_key)) {
@@ -353,27 +374,27 @@ function getOutputApkParthByName(apkName) {
 }
 exports.getOutputApkParthByName = getOutputApkParthByName;
 
-function clearOutApk(){
-    FileUtil.remove(OUT_APK_FOLDER,true);
+function clearOutApk() {
+    FileUtil.remove(OUT_APK_FOLDER, true);
 }
 
 var currentZipFileName = "buildresult";
 
-function zipOutputFile(fileName ,cb ) {
+function zipOutputFile(fileName, cb) {
     var date = new Date();
-    currentZipFileName = currentGameName+"-"+ date.getUTCFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+"-"+date.getTime();
-    console.log("zipOutputFile filename : "+currentZipFileName);
-    var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_BUILD_RESULT_FOLDER + "/"+currentZipFileName+".zip " +OUT_APK_FOLDER 
+    currentZipFileName = currentGameName + "-" + date.getUTCFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getTime();
+    console.log("zipOutputFile filename : " + currentZipFileName);
+    var zipCommand = "winrar a -k -m1 -ep1 -afzip -r -o+ " + OUT_BUILD_RESULT_FOLDER + "/" + currentZipFileName + ".zip " + OUT_APK_FOLDER
     exec(zipCommand, function (err, stdout, stderr) {
         clearOutApk();
         console.log("zip cb err:" + err + "; stdout:" + stdout + "; stderr:" + stderr);
-        cb(currentZipFileName,err,stdout,stderr);
+        cb(currentZipFileName, err, stdout, stderr);
     })
 }
 exports.zipOutputFile = zipOutputFile;
 
 function getOutputZipFile() {
-    var zipFile = FileUtil.joinPath(OUT_BUILD_RESULT_FOLDER + "/"+currentZipFileName+".zip");
+    var zipFile = FileUtil.joinPath(OUT_BUILD_RESULT_FOLDER + "/" + currentZipFileName + ".zip");
     if (FileUtil.exists(zipFile)) {
         return zipFile;
     }

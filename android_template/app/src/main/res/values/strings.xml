@@ -1,1 +1,1 @@
-<resources><string name="app_name">GameName</string><string name="game_url">http://www.baidu.com</string><string name="game_id">22373</string><string name="channel_id">1020</string></resources>
+<resources><string name="app_name">GameName</string><string name="game_url">asdfasdf</string><string name="game_id">22373</string><string name="channel_id">1020</string><string name="back_button_hide">true</string><string name="share_button_hide">true</string><string name="share_url">asdfasdf</string></resources>
