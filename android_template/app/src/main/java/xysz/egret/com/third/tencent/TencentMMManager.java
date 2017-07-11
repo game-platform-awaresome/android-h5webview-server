@@ -44,6 +44,7 @@ public class TencentMMManager {
 
 //    int state = NO_CALL;
     String state_callback = null;
+    String last_url = null;
 
     IWXAPI api;
     Context context;
@@ -70,6 +71,7 @@ public class TencentMMManager {
 
     public void setCallBack(String callBackName){
         state_callback = callBackName;
+        last_url = ((HTML5WebView)webView).lastUri.toString();
     }
 
     public String getCallBackName(){
@@ -156,6 +158,12 @@ public class TencentMMManager {
     public void addParams(boolean isParamsAdded,String baseUrl,Object... params){
         StringBuilder result = new StringBuilder(baseUrl);
 
+        if (params[1] == null) {
+            android.util.Log.d("--> ", "params[1] == null " + last_url);
+            webView.loadUrl(last_url);
+            return;
+        }
+
         if(!isParamsAdded){
             result.append("?").append(params[0]).append("=").append(params[1]);
         }else{
@@ -163,11 +171,12 @@ public class TencentMMManager {
         }
 
         String jumpStr = result.toString();
+        webView.loadUrl(jumpStr);
 //        Log.d("YANJIAQI","jumpUrl="+jumpStr);
-        ContainerActivity ca = (ContainerActivity)context;
-        Message msg = ca.getHandler().obtainMessage(HTML5WebView.MSG_JAVA_CALL_JS);
-        msg.obj = jumpStr;
-        ca.getHandler().sendMessage(msg);
+//        ContainerActivity ca = (ContainerActivity)context;
+//        Message msg = ca.getHandler().obtainMessage(HTML5WebView.MSG_JAVA_CALL_JS);
+//        msg.obj = jumpStr;
+//        ca.getHandler().sendMessage(msg);
     }
 
     public void invokeJS(String function, Object... params){
@@ -228,6 +237,14 @@ public class TencentMMManager {
 
     public TencentMMManager wxLogin(String jumpUrl){
         setCallBack(jumpUrl);
+
+        webView.post(new Runnable() {
+            @Override
+            public void run() {
+                webView.loadUrl("about:blank");
+            }
+        });
+
         sendAuthReq();
         return this;
     }

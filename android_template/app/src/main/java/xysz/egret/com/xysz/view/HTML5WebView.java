@@ -55,7 +55,7 @@ public class HTML5WebView extends WebView {
     private WebChromeClient.CustomViewCallback 	mCustomViewCallback;
     public ValueCallback<Uri> mUploadMessage;
 
-    private Uri lastUri = null;
+    public Uri lastUri = null;
     public Map<String,IUrlFinishLoaded> callBacks = new HashMap<>();
     public Handler handler;
 //    private FrameLayout	mContentView;

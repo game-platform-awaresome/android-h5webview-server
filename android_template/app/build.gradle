@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         //{packageName
-applicationId "org.egret.game"
-versionName "v1.0.1"
-versionCode 1
-//packageName}
+        applicationId "com.egret.bailugame"
+        versionName "1.0"
+        versionCode 1
+        //packageName}
         minSdkVersion 14
         targetSdkVersion 23
     }

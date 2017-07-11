@@ -35,6 +35,7 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
+import org.egret.launcher.versioncontroller.VersionController;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -100,14 +101,12 @@ public class ContainerActivity extends Activity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.setContentView(R.layout.main);
-
         try{
             Util.getIMEI(this);
         }catch(Exception e){
             alertPermissionRequest(e);
             return;
         }
-
         //测试splash页
 //        ((ImageView)findViewById(R.id.id_top_cover)).setVisibility(View.VISIBLE);
         mContainer = (FrameLayout)findViewById(R.id.id_top);
@@ -126,6 +125,8 @@ public class ContainerActivity extends Activity{
             Uri uri = Uri.parse(gamecenter_url);
             addShortcut(icon, "奇米游戏", uri);
         }
+
+        VersionController.sendData("", this);
     }
 
     @Override
@@ -157,6 +158,8 @@ public class ContainerActivity extends Activity{
 //        TencentMMManager.getInstance()
 //                .init(this)
 //                .wxLogin("onReceive");
+
+        VersionController.resumeApp();
     }
 
     @Override
@@ -164,6 +167,7 @@ public class ContainerActivity extends Activity{
         Log.i("yanjiaqi", "onPause");
         super.onPause();
         saveCookieForDomainFromDynamic(startUrl, startUrlDomain);
+        VersionController.pauseApp();
     }
 
     @Override
