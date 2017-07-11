@@ -167,4 +167,40 @@ public class Util {
         return Build.VERSION.SDK_INT;
     }
 
+    public static String getGameURL(Context context){
+        int url_id = context.getResources().getIdentifier("game_url", "string", context.getPackageName());
+        String url = null;
+        if(url_id != 0) {
+            url = context.getResources().getString(url_id);
+        }
+        return url;
+    }
+
+    public static String getGameURLWithParams(Context context){
+        String url = Util.getGameURL(context);
+        if(url != null && !url.isEmpty()) {
+            return url +(url.contains("?")? "&":"?")+Util.getUrlParams(context);
+        }
+        return null;
+    }
+
+    public static boolean isBackButtonVisiable(Context context){
+        int id = context.getResources().getIdentifier("back_button_hide", "string", context.getPackageName());
+        return id == 0;
+    }
+
+    public static boolean isShareButtonVisiable(Context context){
+        int id = context.getResources().getIdentifier("share_button_hide", "string", context.getPackageName());
+        return id == 0;
+    }
+
+    public static String getShareURL(Context context){
+        int url_id = context.getResources().getIdentifier("share_url", "string", context.getPackageName());
+        String url = null;
+        if(url_id != 0) {
+            url = context.getResources().getString(url_id);
+        }
+        return url;
+    }
+
 }

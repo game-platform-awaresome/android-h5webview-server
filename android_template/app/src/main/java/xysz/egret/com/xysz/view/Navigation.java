@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import xysz.egret.com.third.tencent.TencentMMManager;
 import xysz.egret.com.xysz.R;
 import xysz.egret.com.xysz.Util;
 
@@ -26,8 +25,10 @@ public class Navigation {
     private RelativeLayout relativeLayout;
 
     private Button btn_back;
+    private boolean _btnBackVisable;
     private Button btn_reload;
     private Button btn_share;
+    private String _shareUrl;
     private TextView tittle;
 
     private final String homeUrl = "http://wan.yichi666.com/go.php";
@@ -51,20 +52,26 @@ public class Navigation {
         relativeLayout = (RelativeLayout)((Activity)context).findViewById(R.id.nav_layout);
 
         btn_back = (Button)relativeLayout.findViewById(R.id.btn_back);
-        btn_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("++> ", "back");
-
-                webView.loadUrl(_startUrl);
+        _btnBackVisable = Util.isBackButtonVisiable(context);
+        if(_btnBackVisable) {
+            btn_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("++> ", "back");
+                    if (_startUrl != null && !_startUrl.isEmpty()) {
+                        webView.loadUrl(_startUrl);
+                    }
 //                if (lastUrl.indexOf("appId") != -1) {
 //                    webView.loadUrl(lastUrl.substring(0, lastUrl.indexOf("&appId")));
 //                }
 //                else {
 //                    webView.goBack();
 //                }
-            }
-        });
+                }
+            });
+       }else{
+            btn_back.setVisibility(View.INVISIBLE);
+        }
 
         btn_reload = (Button)relativeLayout.findViewById(R.id.btn_reload);
         btn_reload.setOnClickListener(new View.OnClickListener() {
@@ -77,19 +84,25 @@ public class Navigation {
         });
 
         btn_share = (Button)relativeLayout.findViewById(R.id.btn_share);
-        btn_share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("++> ", "share");
-
-                webView.loadUrl("javascript:window.DaKaShareWX()");
-            }
-        });
+        _shareUrl = Util.getShareURL(context);
+        if(Util.isShareButtonVisiable(context)) {
+            btn_share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("++> ", "share");
+                    if(_shareUrl != null && !_shareUrl.isEmpty()) {
+                        webView.loadUrl(_shareUrl);
+                    }
+                }
+            });
+        }else{
+            btn_share.setVisibility(View.INVISIBLE);
+        }
 
         tittle = (TextView)relativeLayout.findViewById(R.id.text_tittle);
 
-        _instance = this;
-        _startUrl = "http://wan.yichi666.com/go.php?" + Util.getUrlParams(context);
+
+        _startUrl = Util.getGameURLWithParams(context);
 
         relativeLayout.post(new Runnable() {
             @Override
@@ -117,12 +130,13 @@ public class Navigation {
         currentUrl = url;
         Log.d("++> ", url);
 
-        if (url.indexOf(homeUrl) != -1 || url.indexOf(homeUrl1) != -1 ||
-                url.indexOf(homeUrl2) != -1 || url.indexOf(homeUrl3) != -1) {
-            btn_back.setVisibility(View.INVISIBLE);
-        }
-        else {
-            btn_back.setVisibility(View.VISIBLE);
+        if(_btnBackVisable) {
+            if (url.indexOf(homeUrl) != -1 || url.indexOf(homeUrl1) != -1 ||
+                    url.indexOf(homeUrl2) != -1 || url.indexOf(homeUrl3) != -1) {
+                btn_back.setVisibility(View.INVISIBLE);
+            } else {
+                btn_back.setVisibility(View.VISIBLE);
+            }
         }
     }
 
