@@ -39,7 +39,7 @@ function checkSinge( queryStr ) {
     function checkSign() {
         secret = 'sdas$sd@#d';
         var signe = md5.hex_md5(query_name + query_timestamp + secret);
-        console.log("checkSign =========== signe = " + signe);
+        console.log("checkSign =========== signe = " + signe+";"+query_sign);
         return query_sign == signe;
     }
     if (!checkSign()) {

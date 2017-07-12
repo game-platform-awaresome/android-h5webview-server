@@ -14,7 +14,7 @@ socketClient.on("connect", function () {
     var searchStr = window.location.search;
     console.log("window.location.search ..... " + searchStr);
     
-    socketClient.emit('checkSinge',(searchStr.len>1? searchStr.substr(1):""),function(isSinge){
+    socketClient.emit('checkSinge',(searchStr.length>1? searchStr.substr(1):""),function(isSinge){
         isSinged = isSinge;
         if (false == isSinge) {
             alertUnSinged();
