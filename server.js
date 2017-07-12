@@ -11,6 +11,8 @@ const server = require('http').createServer(app);
 const socketIO = require('socket.io')(server);
 const port = 3456;
 
+const singetool = require("./singetool");
+
 
 var generatedApkArray = [];
 
@@ -34,8 +36,8 @@ app.get('/downloadAllApk', function (req, res, next) {
     //     });
     // }
     var zipFile = packager.getOutputZipFile();
-    if(zipFile && zipFile.length > 0 ){
-        res.download(zipFile,function (e) {
+    if (zipFile && zipFile.length > 0) {
+        res.download(zipFile, function (e) {
             if (e) {
                 console.log("download zip file: " + zipFile + ". error: " + e);
             }
@@ -43,10 +45,31 @@ app.get('/downloadAllApk', function (req, res, next) {
     }
 
 });
+
 app.use("/client", express.static(PATH.resolve(__dirname, "client")));
-app.get("*", (req, res) => {
-    res.redirect("/client");
+app.get("/", (req, res) => {
+    var query = req.query;
+    var queryStr = "";
+    var add = 0;
+    if (Object.getOwnPropertyNames(req.query).length > 0) {
+        queryStr = "/?";
+        for (key in req.query) {
+            queryStr = queryStr + (add == 1 ? "&" : "") + key + "=" + req.query[key]
+            add = 1;
+        }
+    }
+
+    // if (singetool.checkSinge(queryStr)) {
+    //     app.use("/client/error", express.static(PATH.resolve(__dirname, "/client/error")));
+    //     res.redirect("/client/error");
+    // } else {
+        
+        res.redirect("/client" + queryStr);
+    // }
 });
+
+
+
 
 server.listen(port, () => {
     console.log('Game start at port %d', port);
@@ -54,7 +77,6 @@ server.listen(port, () => {
 
 
 var channelBuffer = [];
-
 
 socketIO.on("connection", (socket) => {
     console.log(`${socket.id} connect!`);
@@ -95,6 +117,18 @@ socketIO.on("connection", (socket) => {
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    socket.on('checkSinge', function (queryStr,cb) {
+        var isSinge = false;
+        if (queryStr ) {
+            isSinge = (singetool.checkSinge(queryStr));
+        }
+        if(cb){
+             console.log("cb ......................"+isSinge);
+             cb(isSinge);
+        }
+    });
+
     socket.on('addChannelConfig', function (channelConfig, total, cb) {
 
         channelBuffer.push(channelConfig);
@@ -127,8 +161,8 @@ socketIO.on("connection", (socket) => {
                 game_name: args.game_name,
                 package_name: channelConfig.package_name,
                 game_url: channelConfig.game_url,
-                app_id:channelConfig.app_id,
-                channel_id:channelConfig.channel_id,
+                app_id: channelConfig.app_id,
+                channel_id: channelConfig.channel_id,
                 icon_path: channelConfig.icon_path,
                 version_name: args.version_name,
                 version_code: args.version_code,
@@ -138,10 +172,10 @@ socketIO.on("connection", (socket) => {
                 android_path: args.android_path,
                 wx_app_id: channelConfig.wx_app_id,
                 wx_partner_id: channelConfig.wx_partner_id,
-                wx_key:channelConfig.wx_key,
-                title_back_button_hide:channelConfig.title_back_button_hide,
-                title_share_button_hide:channelConfig.title_share_button_hide,
-                title_share_url:channelConfig.title_share_url
+                wx_key: channelConfig.wx_key,
+                title_back_button_hide: channelConfig.title_back_button_hide,
+                title_share_button_hide: channelConfig.title_share_button_hide,
+                title_share_url: channelConfig.title_share_url
             }
         }
 
@@ -149,7 +183,7 @@ socketIO.on("connection", (socket) => {
 
         var runCB = function (err, stdout, stderr) {
             var checkResult = false;
-            var apkName = runArgs.game_name + "_" + runArgs.package_name+ ".apk";
+            var apkName = runArgs.game_name + "_" + runArgs.package_name + ".apk";
             if (err) {
                 runCounter++;
                 checkResult = true;
@@ -172,15 +206,15 @@ socketIO.on("connection", (socket) => {
                         }, 0)
                     } else {
                         stdout += "<br><br> 开始压缩打包当前构建的所有微端apk ……";
-                        packager.zipOutputFile(apkName , function(zipFileName,err, stdout, stderr){
+                        packager.zipOutputFile(apkName, function (zipFileName, err, stdout, stderr) {
                             console.log("zipOutputFile ---------");
-                            if(err){
-                                socket.emit('console.log', "zip apks err: "+err);
-                            }else{
-                                 socket.emit('console.log', "<br> <a href='/downloadAllApk'>点此下载微端包："+zipFileName+".zip</a>");
+                            if (err) {
+                                socket.emit('console.log', "zip apks err: " + err);
+                            } else {
+                                socket.emit('console.log', "<br> <a href='/downloadAllApk'>点此下载微端包：" + zipFileName + ".zip</a>");
                             }
                         });
-                        
+
                     }
                 }
                 socket.emit('console.log', stdout);

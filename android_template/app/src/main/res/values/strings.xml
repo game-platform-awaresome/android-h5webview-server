@@ -1,13 +1,1 @@
-<resources>
-    <!--<string name="app_name">三生三世</string>-->
-    <string name="app_name">大咖游戏</string>
-    <string name="game_url1">http://gamecenter.egret-labs.org/20379</string>
-    <string name="game_url2">file:///android_asset/index.html</string>
-    <!--<string name="game_url">http://wan.yichi666.com/go.php</string>-->
-    <string name="game_url">http://wan.yichi666.com/play/1020?adFrom=e23bea9</string>
-    <string name="back_button_hide">true</string>
-    <string name="share_url">javascript:window.DaKaShareWX()</string>
-    <!--<string name="game_url">http://gamecenter.egret-labs.org/Index.apkloading</string>-->
-    <!-- gamecenter_url 标记快捷方式 -->
-    <!-- drawable/loading 标记splash页 -->
-</resources>
+<resources><string name="app_name">GameName</string><string name="game_url">asdfasdf</string><string name="game_id">22373</string><string name="channel_id">1020</string><string name="back_button_hide">true</string><string name="share_button_hide">true</string><string name="share_url">asdfasdf</string></resources>

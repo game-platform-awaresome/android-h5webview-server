@@ -1,26 +1,36 @@
+
+var isSinged = false;
+function alertUnSinged() {
+    alert("登陆超时，请重新登陆。");
+    window.location.href = "http://ad.open.egret.com/login.html";
+}
+
 var url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
-console.log("connectURL:", url);
 var socketClient = io.connect(url);
+
 socketClient.on("connect", function () {
     console.log("socket client connected!");
     socketClient.emit("pathCheck");
+    var searchStr = window.location.search;
+    console.log("window.location.search ..... " + searchStr);
+    
+    socketClient.emit('checkSinge',(searchStr.len>1? searchStr.substr(1):""),(isSinge)=>{
+        isSinged = isSinge;
+        if (false == isSinge) {
+            alertUnSinged();
+        }
+    });
 });
 var logger = document.getElementsByName("console_log")[0];
 socketClient.on('console.log', function (args) {
-    // var args = err?errmsg:msg;
-    // if(args.indexOf("BUILD SUCCESSFUL")!=-1){
-    //     // require('electron').remote.require('./packager').openOutputDir();
-    //     document.getElementsByTagName("form")[0].innerHTML += '<input name="download" type="button" value="下载apk" onclick="downloadAPK()"/>';
-    // }
+
     logger.innerHTML += "<p>" + args + "</p>";
     if (document.getElementsByName("clean").length === 0) {
         document.getElementsByTagName("form")[0].innerHTML += '<input name="clean" type="button" value="清空日志" onclick="cleanLog()"/>';
         console.log(document.getElementsByTagName("form"));
     }
 });
-//      showAndroidHomeConfigPanel();
 
-//      const icon_path = document.getElementsByName("icon_path")[0];
 
 window.ondragover = function (e) {
     e.preventDefault();
@@ -233,9 +243,9 @@ function addChannel() {
     //页面顶部按钮//////////////////////////
     tempConfig.title_back_button_hide = document.getElementById("btn_back_hide").checked;
     tempConfig.title_share_button_hide = document.getElementById("btn_share_hide").checked;
-    console.log("ddddddddddddddddddddddddddddddd ddd = "+document.getElementById("btn_back_hide").checked );
+    console.log("ddddddddddddddddddddddddddddddd ddd = " + document.getElementById("btn_back_hide").checked);
     tempConfig.title_share_url = document.getElementById("share_url").value;
-    console.log("cccccccccccccccccccccccccccc = "+document.getElementById("share_url").value);
+    console.log("cccccccccccccccccccccccccccc = " + document.getElementById("share_url").value);
     ///////////////////////////////////
 
     var radio = null;
@@ -381,6 +391,11 @@ function uploadFile(name, inFile, resultBuffer) {
 }
 
 function onStart() {
+    if (!isSinged) {
+        alertUnSinged();
+        return;
+    }
+
     var game_name_val = document.getElementsByName("game_name")[0].value;
     console.log('game_name_val:', game_name_val);
     var package_name_val = document.getElementsByName("package_name")[0].value;
@@ -453,9 +468,9 @@ function onStart() {
             wx_app_id: channelConfig.wx_app_id,
             wx_partner_id: channelConfig.wx_partner_id,
             wx_key: channelConfig.wx_key,
-            title_back_button_hide:channelConfig.title_back_button_hide,
-            title_share_button_hide:channelConfig.title_share_button_hide,
-            title_share_url:channelConfig.title_share_url
+            title_back_button_hide: channelConfig.title_back_button_hide,
+            title_share_button_hide: channelConfig.title_share_button_hide,
+            title_share_url: channelConfig.title_share_url
         }, len, addConfigCB);
     }
 
