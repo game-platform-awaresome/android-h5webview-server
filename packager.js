@@ -261,6 +261,7 @@ function run(args, cb) {
     if (args.android_path) {
         setAndroidHome(args.android_path, cb);
     }
+    const channel_name = args.channel_name;
     const game_name_val = args.game_name;
     currentGameName = game_name_val;
     const package_name_val = args.package_name;

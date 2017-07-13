@@ -159,6 +159,7 @@ socketIO.on("connection", (socket) => {
             var channelConfig = channelList[channelIndex];
             return {
                 game_name: args.game_name,
+                channel_name:channelConfig.channel_name,
                 package_name: channelConfig.package_name,
                 game_url: channelConfig.game_url,
                 app_id: channelConfig.app_id,
@@ -183,7 +184,7 @@ socketIO.on("connection", (socket) => {
 
         var runCB = function (err, stdout, stderr) {
             var checkResult = false;
-            var apkName = runArgs.game_name + "_" + runArgs.package_name + ".apk";
+            var apkName = runArgs.game_name + "_" + runArgs.package_name +"_"+runArgs.channel_name+ ".apk";
             if (err) {
                 runCounter++;
                 checkResult = true;
