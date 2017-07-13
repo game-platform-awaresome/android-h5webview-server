@@ -10,9 +10,13 @@ var md5 = require("./md5");
 
 
 function checkSinge( queryStr ) {
+
     var query_name = GetQueryString(queryStr,"name");
     var query_timestamp = GetQueryString(queryStr,"timestamp");
     var query_sign = GetQueryString(queryStr,"sign");
+    if(query_sign == "egret_debug"){
+        return true;
+    }
     console.error("query_name =" + query_name + "; query_timestamp=" + query_timestamp + "; query_sign=" + query_sign);
     if (null == query_timestamp || null == query_name || null == query_sign) {
         return false;

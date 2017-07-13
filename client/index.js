@@ -205,8 +205,9 @@ function addChannel() {
         return;
     }
     if (!appId || appId.length < 1) {
-        console.error("请输入游戏ID(appId)");
-        return;
+        // console.error("请输入游戏ID(appId)");
+        // return;
+        appId = 2337;
     }
     if (!channelId || channelId.length < 1) {
         console.error("请输入渠道ID");
